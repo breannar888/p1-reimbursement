@@ -1,0 +1,30 @@
+.container {
+  margin: 10px;
+}
+.expense-table {
+  width: 75%;
+  margin: auto;
+  border-collapse: collapse;
+}
+.expense-head {
+  background-color: rgb(194, 194, 194);
+  text-align: left;
+  margin: 10px;
+}
+tr:nth-child(even) {
+  background-color: rgb(241, 241, 241);
+}
+.expense-input {
+  margin-left: auto;
+  position: relative;
+}
+.expense-input input {
+  font-size: 14px;
+  margin: 0;
+  width: 100%;
+  padding: 5px;
+}
+.expense-input input:focus {
+border: 1px solid orange;
+outline: 1px solid orange;
+}
