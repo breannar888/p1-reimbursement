@@ -11,29 +11,24 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Box, Typography } from "@mui/material";
 import { StatusItems } from "./StatusItems";
+import { ExpenseState } from "../../context/ExpenseContext";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: theme.palette.primary.main,
     color: theme.palette.common.white,
     fontWeight: "bold",
   },
 }));
 
 export const ManageStatusList = () => {
-  const [expense, setExpense] = useState([]);
-  const [test, setTest] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:8080/expense-reimbursement/expenses")
-      .then((res) => setExpense(res.data));
-  }, [test]);
+  const { expense, updateExpense, setUpdateExpense } =
+    ExpenseState();
 
   return (
     <Box sx={{ m: "5% 8% 5% 8%" }}>
-      <h1>Manage Expenses </h1>
-      <Typography variant="subtitle2" gutterBottom sx={{fontStyle: "italic"}}>
+      <h1>Manage Expenses</h1>
+      <Typography variant="subtitle2" gutterBottom sx={{ fontStyle: "italic" }}>
         Manage pending expenses by updating their status.
       </Typography>
       <TableContainer component={Paper}>
@@ -54,8 +49,8 @@ export const ManageStatusList = () => {
                   <StatusItems
                     key={exp.id}
                     exp={exp}
-                    setTest={setTest}
-                    test={test}
+                    updateExpense={updateExpense}
+                    setUpdateExpense={setUpdateExpense}
                   />
                 );
               }

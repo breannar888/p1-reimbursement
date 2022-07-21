@@ -1,5 +1,5 @@
 import React from 'react'
-import { ManageStatusList } from '../components/status/ManageStatus'
+import { ManageStatusList } from '../components/status'
 
 export const ManageStatus = () => {
   return (

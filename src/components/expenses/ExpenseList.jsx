@@ -1,50 +1,55 @@
 import React from "react";
-import axios from "axios";
-import { useState, useEffect } from "react";
-import { styled } from "@mui/material/styles";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
+import {
+  TableRow,
+  TableHead,
+  TableContainer,
+  TableBody,
+  Table,
+} from "@mui/material";
 import Paper from "@mui/material/Paper";
 import { Box, Typography } from "@mui/material";
 import { ExpenseItems } from "./ExpenseItems";
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.white,
-    color: theme.palette.warning.light,
-    fontWeight: "bold",
-  },
-}));
+import { StyledTableHeader } from "../muiComponents/muiStyled";
+import { ExpenseState } from "../../context/ExpenseContext";
 
 export const ExpenseList = () => {
-  const [expense, setExpense] = useState([]);
+  
+  //access values from context provider
+  const {expense, setExpense} = ExpenseState();
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:8080/expense-reimbursement/expenses")
-      .then((res) => setExpense(res.data));
-  }, []);
+  //update expense state when item is deleted
+  const removeItem = (id) => {
+    setExpense(
+      expense.filter((item) => {
+        return item.id !== id;
+      })
+    );
+  };
 
   return (
     <Box sx={{ m: "5% 8% 5% 8%" }}>
-      <h1>View All</h1>
-      <Typography variant="subtitle2" gutterBottom sx={{fontStyle: "italic"}}>
-        View, Update, and Delete expenses.
-      </Typography>
+      <Box>
+        <Box>
+          <h1>View All</h1>
+          <Typography
+            variant="subtitle2"
+            gutterBottom
+            sx={{ fontStyle: "italic" }}
+          >
+            View, Update, and Delete expenses.
+          </Typography>
+        </Box>
+      </Box>
       <TableContainer component={Paper}>
         <Table aria-label="expenses list">
           <TableHead>
             <TableRow>
-            <StyledTableCell align="left">ID</StyledTableCell>
-              <StyledTableCell align="left">Employee</StyledTableCell>
-              <StyledTableCell align="left">Amount</StyledTableCell>
-              <StyledTableCell align="left">Reason</StyledTableCell>
-              <StyledTableCell align="right">Status</StyledTableCell>
-              <StyledTableCell align="right">Actions</StyledTableCell>
+              <StyledTableHeader align="left">ID</StyledTableHeader>
+              <StyledTableHeader align="left">Employee</StyledTableHeader>
+              <StyledTableHeader align="left">Amount</StyledTableHeader>
+              <StyledTableHeader align="left">Reason</StyledTableHeader>
+              <StyledTableHeader align="right">Status</StyledTableHeader>
+              <StyledTableHeader align="right">Actions</StyledTableHeader>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -53,6 +58,7 @@ export const ExpenseList = () => {
                 exp={exp}
                 key={exp.id}
                 setExpense={setExpense}
+                removeItem={removeItem}
               />
             ))}
           </TableBody>
