@@ -1,59 +1,35 @@
 import React from "react";
+import axios from "axios";
+import { useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
-import { useState, useRef } from "react";
-import { styled } from "@mui/material/styles";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import TableRow from "@mui/material/TableRow";
 import { Box } from "@mui/material";
 import "../../css/expensetable.css";
 import { StatusIcons } from "../status/StatusIcons";
+import { StyledTableCell, StyledTableRow } from "../muiComponents/muiStyled";
 
-const StyledTableCell = styled(TableCell)(() => ({
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-    maxWidth: "100px",
-    minWidth: "100px",
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:hover": {
-    backgroundColor: theme.palette.action.selected,
-  },
-
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
-    "&:hover": {
-      backgroundColor: theme.palette.action.selected,
-    },
-  },
-  // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-}));
-
-export const ExpenseItems = ({ exp, setExpense }) => {
+export const ExpenseItems = ({ exp, setExpense, removeItem }) => {
   const [update, setUpdate] = useState(false);
   const [name, setName] = useState(exp.name);
   const [amount, setAmount] = useState(exp.price);
   const [reason, setReason] = useState(exp.reason);
 
+  //form value refs
   const nameRef = useRef();
   const amountRef = useRef();
   const reasonRef = useRef();
 
+  //toggle between showing/hiding update inputs
   const toggleUpdate = () => {
     setUpdate(!update);
   };
 
   const handleUpdate = async () => {
     try {
+      //send data to API
       const data = await axios.post(
         `http://localhost:8080/expense-reimbursement/expenses?id=${exp.id}`,
         {
@@ -64,6 +40,7 @@ export const ExpenseItems = ({ exp, setExpense }) => {
         }
       );
 
+      //when data is sent, get updated data from API
       if (data) {
         axios
           .get("http://localhost:8080/expense-reimbursement/expenses")
@@ -80,9 +57,9 @@ export const ExpenseItems = ({ exp, setExpense }) => {
   const handleDelete = async () => {
     try {
       await axios.delete(
-        `http://localhost:8080/expense-reimbursement/expenses/${exp.id}`
+        `http://localhost:8080/expense-reimbursement/expenses?id=${exp.id}`
       );
-      setUpdate(false);
+      removeItem(exp.id);
     } catch (err) {
       console.log(err);
     }
@@ -141,7 +118,9 @@ export const ExpenseItems = ({ exp, setExpense }) => {
           exp.reason
         )}
       </StyledTableCell>
-      <StyledTableCell align="right"><StatusIcons statID={exp.statusid}/></StyledTableCell>
+      <StyledTableCell align="right">
+        <StatusIcons statID={exp.statusid} />
+      </StyledTableCell>
       <StyledTableCell align="right">
         <Box
           sx={{
@@ -154,9 +133,7 @@ export const ExpenseItems = ({ exp, setExpense }) => {
             {update ? (
               <Box sx={{ "&:hover": { color: "green" } }}>
                 <FontAwesomeIcon
-                  onClick={() => {
-                    handleUpdate();
-                  }}
+                  onClick={handleUpdate}
                   icon={faCheck}
                   size="lg"
                 />
@@ -164,9 +141,7 @@ export const ExpenseItems = ({ exp, setExpense }) => {
             ) : (
               <Box sx={{ "&:hover": { color: "gray" } }}>
                 <FontAwesomeIcon
-                  onClick={() => {
-                    toggleUpdate();
-                  }}
+                  onClick={toggleUpdate}
                   icon={faPenToSquare}
                   size="lg"
                 />
@@ -178,17 +153,13 @@ export const ExpenseItems = ({ exp, setExpense }) => {
               <FontAwesomeIcon
                 icon={faXmark}
                 size="lg"
-                onClick={() => {
-                  toggleUpdate();
-                }}
+                onClick={toggleUpdate}
               />
             ) : (
               <FontAwesomeIcon
                 icon={faTrashCan}
                 size="lg"
-                onClick={() => {
-                  handleDelete();
-                }}
+                onClick={handleDelete}
               />
             )}
           </Box>

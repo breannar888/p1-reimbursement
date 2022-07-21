@@ -3,20 +3,7 @@ import "../css/nav.css";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPiggyBank } from "@fortawesome/free-solid-svg-icons";
-import { Button } from "@mui/material";
-import { styled } from "@mui/material/styles";
-
-const StyledBtn = styled(Button)(({ theme }) => ({
-
-  backgroundColor: theme.palette.common.black,
-  color: theme.palette.common.white,
-  textTransform: "none",
-  fontSize: "16px",
-  "&:hover": {
-    backgroundColor: theme.palette.common.white,
-    color: theme.palette.common.black,
-  }
-}));
+import { NavBtn } from "./muiComponents/muiStyled";
 
 export const NavBar = () => {
   return (
@@ -27,14 +14,12 @@ export const NavBar = () => {
         </Link>
       </section>
       <section className="nav-item-wrapper">
-        <Link className="nav-item" to="/">
-          View All
-        </Link>
+        <Link className="nav-item" to="/">View All</Link>
         <Link className="nav-item" to="/addexpense">
           Add Expenses
         </Link>
         <Link className="nav-item" to="/managestatus">
-          <StyledBtn>Manage Expenses</StyledBtn>
+          <NavBtn>Manage Expenses</NavBtn>
         </Link>
       </section>
     </nav>
