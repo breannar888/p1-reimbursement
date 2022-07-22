@@ -6,8 +6,7 @@ export const ExpenseContext = createContext();
 
 const ExpenseProvider = (props) => {
   const [expense, setExpense] = useState([]);
-  const [status, setStatus] = useState([]);
-  const [updateExpense, setUpdateExpense] = useState([]);
+  const [updateExpense, setUpdateExpense] = useState(false);
 
   useEffect(() => {
     axios
@@ -15,10 +14,6 @@ const ExpenseProvider = (props) => {
       .then((resp) => setExpense(resp.data))
       .catch((error) => console.log(error));
 
-    axios
-      .get("http://localhost:8080/expense-reimbursement/manage")
-      .then((resp) => setStatus(resp.data))
-      .catch((error) => console.log(error));
   }, [updateExpense]);
 
   const value = {
@@ -26,8 +21,6 @@ const ExpenseProvider = (props) => {
     setExpense,
     updateExpense,
     setUpdateExpense,
-    status,
-    setStatus,
   };
 
   return (

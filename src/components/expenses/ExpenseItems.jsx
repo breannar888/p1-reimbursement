@@ -37,6 +37,7 @@ export const ExpenseItems = ({ exp, setExpense, removeItem }) => {
           price: amountRef.current.value,
           reason: reasonRef.current.value,
           statusid: exp.statusid,
+          
         }
       );
 

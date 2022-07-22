@@ -26,6 +26,9 @@ export const ExpenseList = () => {
     );
   };
 
+  //sort expense items by expense.id
+  const sortItems = expense.sort((a, b) => a.id - b.id);
+
   return (
     <Box sx={{ m: "5% 8% 5% 8%" }}>
       <Box>
@@ -53,7 +56,7 @@ export const ExpenseList = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {expense.map((exp) => (
+            {sortItems.map((exp) => (
               <ExpenseItems
                 exp={exp}
                 key={exp.id}
